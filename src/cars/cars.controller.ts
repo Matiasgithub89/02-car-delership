@@ -1,17 +1,30 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { CarsService } from './cars.service';
 
 @Controller('cars')
 export class CarsController {
 
-  private cars=['toyota', 'honda', 'audi'];
+ constructor(
+  private readonly carsService:CarsService
+ ){
+
+ }
   
   @Get()
   getAllCars() {
-    return this.cars;
+    return this.carsService.findAll();
   }
   @Get(':id')
-  getCarById(@Param('id')id:number){
-    console.log({id:this.cars[id]})
-    return this.cars[id]
+  getCarById(@Param('id', ParseIntPipe )id:number){  
+    console.log({id}) ;
+    return this.carsService.findOneById(+id)
+  }
+  @Post()
+  createCars(@Body()body:any) {
+    return body;
+  }   
+  @Patch(':id')
+  updateCars(@Body()body:any) {
+    return body;
   }
 }
